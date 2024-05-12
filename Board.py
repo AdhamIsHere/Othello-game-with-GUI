@@ -45,16 +45,28 @@ class Board:
                     moves.append((row, col))
         return moves
 
+    # def isValidMove(self, row, col, player):
+    #     if self.__board[row][col].getColor() != '':
+    #         return False
+    #
+    #     for i in range(-1, 2):
+    #         for j in range(-1, 2):
+    #             if i == 0 and j == 0:
+    #                 continue
+    #             if self.isDirectionValid(row, col, i, j, player):
+    #                 return True
+    #     return False
+
     def isValidMove(self, row, col, player):
         if self.__board[row][col].getColor() != '':
             return False
 
-        for i in range(-1, 2):
-            for j in range(-1, 2):
-                if i == 0 and j == 0:
-                    continue
-                if self.isDirectionValid(row, col, i, j, player):
-                    return True
+        # Define the directions for horizontal and vertical movement
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+        for dr, dc in directions:
+            if self.isDirectionValid(row, col, dr, dc, player):
+                return True
         return False
 
     def isDirectionValid(self, row, col, dr, dc, player):
@@ -76,7 +88,6 @@ class Board:
             c += dc
 
         return False
-
 
     def makeMove(self, x, y, CurrentPlayer):
         self.__board[x][y].setColor(CurrentPlayer)
@@ -108,5 +119,6 @@ class Board:
             return 'white'
         else:
             return 'draw'
+
     def __str__(self):
         return '\n'.join([' '.join([str(cell) for cell in row]) for row in self.__board])

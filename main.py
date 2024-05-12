@@ -11,7 +11,7 @@ VALID_MOVES = board.getPossibleMoves('black')
 pygame.init()
 
 # Constants
-SCREEN_HEIGHT = 500
+SCREEN_HEIGHT = 550
 SCREEN_WIDTH = 450
 
 CELL_RADIUS = 20
@@ -46,7 +46,7 @@ cord = (x, y)
 
 while running:
     # Draw the board
-    SCREEN.fill((0, 128, 0))
+    SCREEN.fill((0, 144, 103))
     # Event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -64,6 +64,8 @@ while running:
                     # board.setColor(cord[0], cord[1], CurrentPlayer)
                     board.makeMove(cord[1], cord[0], CurrentPlayer)
                     CurrentPlayer = board.playerRev(CurrentPlayer)
+                    if len(board.getPossibleMoves(CurrentPlayer)) == 0:
+                        CurrentPlayer = board.playerRev(CurrentPlayer)
 
             elif event.button == 3:  # Right mouse button
                 print("Right mouse button clicked at", event.pos, " Cell: ",
@@ -94,23 +96,29 @@ while running:
     for x in VALID_MOVES:
         pygame.gfxdraw.circle(SCREEN, 50 + x[1] * 50, 50 + x[0] * 50, 10, (0, 0, 255))
 
+    # drawing white count -------------------------------------
+    pygame.gfxdraw.filled_circle(SCREEN, WHITE_CELL_ICON_POS[0], WHITE_CELL_ICON_POS[1], CELL_RADIUS, WHITE)
+    whiteCount = FONT.render(str(board.countColor('white')), True, BLACK)
+    SCREEN.blit(whiteCount, (410, 450))
+
     # drawing black count -------------------------------------
     pygame.gfxdraw.filled_circle(SCREEN, BLACK_CELL_ICON_POS[0], BLACK_CELL_ICON_POS[1], CELL_RADIUS, BLACK)
     blackCount = FONT.render(str(board.countColor('black')), True, BLACK)
     SCREEN.blit(blackCount, (80, 450))
 
-    # drawing depth -------------------------------------
+    # drawing depth ------------------------------------------
     depthText = FONT.render(f"Depth: {depth}", True, BLACK)
     SCREEN.blit(depthText, (180, 435))
 
     # drawing difficulty -------------------------------------
     diffText = FONT.render(f"Difficulty: {diff}", True, BLACK)
-    SCREEN.blit(diffText, (130, 460))
+    SCREEN.blit(diffText, (130, 465))
 
-    # drawing white count -------------------------------------
-    pygame.gfxdraw.filled_circle(SCREEN, WHITE_CELL_ICON_POS[0], WHITE_CELL_ICON_POS[1], CELL_RADIUS, WHITE)
-    whiteCount = FONT.render(str(board.countColor('white')), True, BLACK)
-    SCREEN.blit(whiteCount, (410, 450))
+    # drawing current player turn
+    turn_text = FONT.render(f"{CurrentPlayer}'s turn", True, BLACK if CurrentPlayer == 'black' else WHITE)
+    SCREEN.blit(turn_text, (160, 495))
+
+
 
     # drawing board indexes -------------------------------------
     for i, letter in enumerate(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']):
@@ -139,14 +147,17 @@ while running:
             REC_WIDTH = 50
             pygame.draw.rect(SCREEN, BLACK, (rec_x, rec_y, REC_WIDTH, REC_HEIGHT), 1)
 
-    # if board.isGameOver():
-    if True:
-        print("Game Over")
+    if board.isGameOver():
         Winner = board.getWinner()
-        print(f"The winner is {Winner}")
+        # print("Game Over")
+        # print(f"The winner is {Winner}")
+        # draw the winner in a box
+        # pygame.draw.rect(SCREEN, WHITE, (100, 200, 250, 100))
         # draw the winner in a box with rounded corners
-        pygame.draw.rect(SCREEN, WHITE, pygame.Rect(100, 200, 250, 100), 2, 3)
-        
+
+        pygame.gfxdraw.box(SCREEN, pygame.Rect(105, 205, 240, 90), WHITE)
+        pygame.draw.rect(SCREEN, (226,217,208), pygame.Rect(100, 200, 250, 100), 2, 3)
+
         winnerText = FONT.render("It's a draw", True, BLACK)
         text_x = 165
         text_y = 235
