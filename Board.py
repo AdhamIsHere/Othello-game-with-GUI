@@ -100,6 +100,8 @@ class Board:
 
     def flipDirection(self, x, y, i, j, CurrentPlayer):
         r, c = x + i, y + j
+        if i != 0 and j != 0:
+            return ;
         while 0 <= r < 8 and 0 <= c < 8:
             if self.__board[r][c].getColor() == CurrentPlayer:
                 return
