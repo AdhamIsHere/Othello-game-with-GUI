@@ -16,3 +16,6 @@ class Cell:
 
     def isEmpty(self):
         return self.__color == ''
+
+    def __str__(self):
+        return f"Cell({self.__color})"
