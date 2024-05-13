@@ -1,4 +1,6 @@
 import pygame.gfxdraw
+
+from AlphaBetaPruning import AIPlayer
 from Board import Board
 
 # Initialize board
@@ -21,18 +23,20 @@ EASY = 1
 MEDIUM = 3
 HARD = 5
 
-PLAYER_1 = 'black'
+PLAYER_1 = 'Human'
+AI = AIPlayer('white')
 
 # Variables
 diff = "Easy"
 depth = 1
 START = False
 OPPONENT = "Human"
-CurrentPlayer = PLAYER_1
+CurrentPlayer = 'black'
+TURN = 'Human'
 
 Cell_x = 0
 Cell_y = 0
-cord = (Cell_x,Cell_y)
+cord = (Cell_x, Cell_y)
 
 # Set up the screen
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -46,6 +50,7 @@ running = True
 def draw_circle(screen, color, center, radius):
     pygame.gfxdraw.aacircle(screen, center[0], center[1], radius, color)
     pygame.gfxdraw.filled_circle(screen, center[0], center[1], radius, color)
+
 
 
 while running:
@@ -64,11 +69,30 @@ while running:
                 Cell_y = ((event.pos[1] - 25) // 50)
                 if 0 <= Cell_x < 8 and 0 <= Cell_y < 8:
                     cord = (Cell_x, Cell_y)
-                if board.isValidMove(Cell_y, Cell_x, CurrentPlayer):
-                    board.makeMove(Cell_y, Cell_x, CurrentPlayer)
-                    CurrentPlayer = board.playerRev(CurrentPlayer)
-                    if len(board.getPossibleMoves(CurrentPlayer)) == 0:
+
+                    # Human vs Human
+                if OPPONENT == "Human" :
+                    if board.isValidMove(Cell_y, Cell_x, CurrentPlayer):
+                        board.makeMove(Cell_y, Cell_x, CurrentPlayer)
                         CurrentPlayer = board.playerRev(CurrentPlayer)
+                        if len(board.getPossibleMoves(CurrentPlayer)) == 0:
+                            CurrentPlayer = board.playerRev(CurrentPlayer)
+                elif OPPONENT == "CPU":
+                    # Human vs CPU
+                    if CurrentPlayer == 'black':
+                        if board.isValidMove(Cell_y, Cell_x, CurrentPlayer):
+                            board.makeMove(Cell_y, Cell_x, CurrentPlayer)
+                            CurrentPlayer = board.playerRev(CurrentPlayer)
+                            if len(board.getPossibleMoves(CurrentPlayer)) == 0:
+                                CurrentPlayer = board.playerRev(CurrentPlayer)
+                    else:
+                        if len(board.getPossibleMoves(CurrentPlayer)) > 0:
+                            move = AI.getBestMove(board, depth)
+                            board.makeMove(move[0], move[1], CurrentPlayer)
+                            CurrentPlayer = board.playerRev(CurrentPlayer)
+                            if len(board.getPossibleMoves(CurrentPlayer)) == 0:
+                                CurrentPlayer = board.playerRev(CurrentPlayer)
+
 
             elif event.button == 3:  # Right mouse button
                 print("Right mouse button clicked at", event.pos, " Cell: ",
@@ -100,6 +124,7 @@ while running:
 
     # drawing cursor -------------------------------------
     VALID_COLOR = (0, 0, 255) if board.isValidMove(cord[1], cord[0], CurrentPlayer) else (255, 0, 0)
+    pygame.gfxdraw.aacircle(SCREEN, 50 + cord[0] * 50, 50 + cord[1] * 50, 16, VALID_COLOR)
     pygame.gfxdraw.aacircle(SCREEN, 50 + cord[0] * 50, 50 + cord[1] * 50, 15, VALID_COLOR)
 
     # drawing valid moves -------------------------------------
@@ -191,8 +216,8 @@ while running:
         Winner = board.getWinner()
 
         # draw the winner in a box with rounded corners
-        pygame.gfxdraw.box(SCREEN, pygame.Rect(80, 180, 290, 140), (220, 220, 220))
-        pygame.draw.rect(SCREEN, (47, 79, 79), pygame.Rect(79, 179, 292, 142), 4, 3)
+        # pygame.gfxdraw.box(SCREEN, pygame.Rect(80, 180, 290, 140), (220, 220, 220))
+        # pygame.draw.rect(SCREEN, (47, 79, 79), pygame.Rect(79, 179, 292, 142), 4, 3)
         winnerText = FONT.render("It's a draw", True, BLACK)
         text_x = 165
         text_y = 235
