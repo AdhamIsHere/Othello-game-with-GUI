@@ -78,7 +78,7 @@ class Board:
             c += dc
         return False
 
-    def makeMove(self, x, y, CurrentPlayer):
+    def makeMove(self, x, y, CurrentPlayer ):
         self.__board[x][y].setColor(CurrentPlayer)
         for i, j in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             if self.isDirectionValid(x, y, i, j, CurrentPlayer):

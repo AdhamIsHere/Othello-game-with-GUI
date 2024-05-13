@@ -137,7 +137,4 @@ class AIPlayer:
                         bestMove = (row, col)
 
                     alpha = max(alpha, eval)
-        print("4")
-        print("best move board: ", board)
-        print("5")
         return bestMove

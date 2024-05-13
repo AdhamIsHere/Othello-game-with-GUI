@@ -119,7 +119,7 @@ while running:
     if CurrentPlayer == 'white' and TURN == 'CPU':
         if len(board.getPossibleMoves(CurrentPlayer)) > 0:
             move = AI.getBestMove(board, depth)
-            board.makeMove(move[0], move[1], CurrentPlayer)
+            board.makeMove(move[0], move[1], CurrentPlayer )
             CurrentPlayer = board.playerRev(CurrentPlayer)
             TURN = 'Human'
             if len(board.getPossibleMoves(CurrentPlayer)) == 0:
@@ -220,8 +220,8 @@ while running:
         Winner = board.getWinner()
 
         # draw the winner in a box with rounded corners
-        # pygame.gfxdraw.box(SCREEN, pygame.Rect(80, 180, 290, 140), (220, 220, 220))
-        # pygame.draw.rect(SCREEN, (47, 79, 79), pygame.Rect(79, 179, 292, 142), 4, 3)
+        pygame.gfxdraw.box(SCREEN, pygame.Rect(80, 180, 290, 140), (220, 220, 220))
+        pygame.draw.rect(SCREEN, (47, 79, 79), pygame.Rect(79, 179, 292, 142), 4, 3)
         winnerText = FONT.render("It's a draw", True, BLACK)
         text_x = 165
         text_y = 235
