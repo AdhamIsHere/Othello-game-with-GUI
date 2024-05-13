@@ -52,7 +52,6 @@ def draw_circle(screen, color, center, radius):
     pygame.gfxdraw.filled_circle(screen, center[0], center[1], radius, color)
 
 
-
 while running:
     # Draw the board
     SCREEN.fill((0, 144, 103))
@@ -71,28 +70,23 @@ while running:
                     cord = (Cell_x, Cell_y)
 
                     # Human vs Human
-                if OPPONENT == "Human" :
+                if OPPONENT == "Human":
                     if board.isValidMove(Cell_y, Cell_x, CurrentPlayer):
                         board.makeMove(Cell_y, Cell_x, CurrentPlayer)
                         CurrentPlayer = board.playerRev(CurrentPlayer)
                         if len(board.getPossibleMoves(CurrentPlayer)) == 0:
                             CurrentPlayer = board.playerRev(CurrentPlayer)
+
                 elif OPPONENT == "CPU":
                     # Human vs CPU
-                    if CurrentPlayer == 'black':
+                    if CurrentPlayer == 'black' and TURN == 'Human':
                         if board.isValidMove(Cell_y, Cell_x, CurrentPlayer):
                             board.makeMove(Cell_y, Cell_x, CurrentPlayer)
                             CurrentPlayer = board.playerRev(CurrentPlayer)
+                            TURN = 'CPU'
                             if len(board.getPossibleMoves(CurrentPlayer)) == 0:
                                 CurrentPlayer = board.playerRev(CurrentPlayer)
-                    else:
-                        if len(board.getPossibleMoves(CurrentPlayer)) > 0:
-                            move = AI.getBestMove(board, depth)
-                            board.makeMove(move[0], move[1], CurrentPlayer)
-                            CurrentPlayer = board.playerRev(CurrentPlayer)
-                            if len(board.getPossibleMoves(CurrentPlayer)) == 0:
-                                CurrentPlayer = board.playerRev(CurrentPlayer)
-
+                                TURN = 'Human'
 
             elif event.button == 3:  # Right mouse button
                 print("Right mouse button clicked at", event.pos, " Cell: ",
@@ -121,6 +115,16 @@ while running:
                     OPPONENT = "CPU"
                 else:
                     OPPONENT = "Human"
+
+    if CurrentPlayer == 'white' and TURN == 'CPU':
+        if len(board.getPossibleMoves(CurrentPlayer)) > 0:
+            move = AI.getBestMove(board, depth)
+            board.makeMove(move[0], move[1], CurrentPlayer)
+            CurrentPlayer = board.playerRev(CurrentPlayer)
+            TURN = 'Human'
+            if len(board.getPossibleMoves(CurrentPlayer)) == 0:
+                CurrentPlayer = board.playerRev(CurrentPlayer)
+                TURN = 'CPU'
 
     # drawing cursor -------------------------------------
     VALID_COLOR = (0, 0, 255) if board.isValidMove(cord[1], cord[0], CurrentPlayer) else (255, 0, 0)

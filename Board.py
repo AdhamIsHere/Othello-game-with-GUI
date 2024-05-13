@@ -106,9 +106,12 @@ class Board:
         else:
             return 'draw'
 
-    def copy(self):
-        newBoard = Board()
-        newBoard.setBoard([[cell for cell in row] for row in self.__board])
-        return newBoard
+    def clone(self):
+        new_board = Board()
+        for row in range(8):
+            for col in range(8):
+                new_board.setColor(row, col, self.__board[row][col].getColor())
+        return new_board
+
     def __str__(self):
-        return '\n'.join([' '.join([str(cell) for cell in row]) for row in self.__board])
+        return '\n'.join([' '.join([cell.getColor() for cell in row]) for row in self.__board])
