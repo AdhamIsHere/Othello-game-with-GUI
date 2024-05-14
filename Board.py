@@ -46,6 +46,8 @@ class Board:
         return moves
 
     def isValidMove(self, row, col, player):
+        if not (0 <= row < 8 and 0 <= col < 8):
+            return False
         if self.__board[row][col].getColor() != '':
             return False
 
