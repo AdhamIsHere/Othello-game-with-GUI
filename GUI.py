@@ -132,6 +132,7 @@ class GUI:
             if self.CurrentPlayer == 'white' and self.TURN == 'CPU':
                 if len(self.board.getPossibleMoves(self.CurrentPlayer)) > 0:
                     move = self.AI.getBestMove(self.board, self.depth)
+
                     self.board.makeMove(move[0], move[1], self.CurrentPlayer)
                     self.CurrentPlayer = self.board.playerRev(self.CurrentPlayer)
                     self.TURN = 'Human'
@@ -183,7 +184,7 @@ class GUI:
             opponent_text = self.FONT.render(f"Playing VS {self.OPPONENT}", True, self.BLACK)
             self.SCREEN.blit(opponent_text, (115, 525))
 
-            # drawing self.board indexes -------------------------------------
+            # drawing board indexes -------------------------------------
             for i, letter in enumerate(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']):
                 boardIndex = self.FONT.render(letter, True, self.BLACK)
                 self.SCREEN.blit(boardIndex, (40 + i * 50, 3))
@@ -191,7 +192,7 @@ class GUI:
                 boardIndex = self.FONT.render(i.__str__(), True, self.BLACK)
                 self.SCREEN.blit(boardIndex, (10, 40 + (i - 1) * 50))
 
-            # drawing self.board and cells -------------------------------------
+            # drawing board and cells -------------------------------------
             for row in range(8):
                 for col in range(8):
                     cell = self.board.getCell(row, col)

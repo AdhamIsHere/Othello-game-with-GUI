@@ -12,7 +12,7 @@ class AIPlayer:
     def getColor(self):
         return self.__color
 
-    def alphaBetaPruning(self, board, depth, alpha=float("-inf"), beta=float("inf"), maximizingPlayer=True):
+    def alphabeta(self, board, depth, alpha, beta, maximizingPlayer=True):
         if depth == 0 or board.isGameOver():
             return utility(board, maximizingPlayer)
 
@@ -21,8 +21,8 @@ class AIPlayer:
             newBoard = board.clone()
 
             for row, col in board.getPossibleMoves(self.__color):
-                newBoard.getCell(row, col).setColor(self.__color)
-                evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, False)
+                newBoard.makeMove(row, col, self.__color)
+                evaluation = self.alphabeta(newBoard, depth - 1, alpha, beta, False)
                 maxEval = max(maxEval, evaluation)
                 alpha = max(alpha, evaluation)
                 if beta <= alpha:
@@ -33,8 +33,8 @@ class AIPlayer:
             newBoard = board.clone()
 
             for row, col in board.getPossibleMoves(board.playerRev(self.__color)):
-                newBoard.getCell(row, col).setColor(board.playerRev(self.__color))
-                evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, True)
+                newBoard.makeMove(row, col, board.playerRev(self.__color))
+                evaluation = self.alphabeta(newBoard, depth - 1, alpha, beta, True)
                 minEval = min(minEval, evaluation)
                 beta = min(beta, evaluation)
                 if beta <= alpha:
@@ -46,14 +46,15 @@ class AIPlayer:
         maxEval = float('-inf')
         alpha = float('-inf')
         beta = float('inf')
-        newBoard = board.clone()
-        for row in range(8):
-            for col in range(8):
-                if board.isValidMove(row, col, self.__color):  # Check if the move is valid
-                    newBoard.setColor(row, col, self.__color)
-                    evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, False)
-                    if evaluation >= maxEval:
-                        maxEval = evaluation
-                        bestMove = (row, col)
-                    alpha = max(alpha, evaluation)
+
+        for row, col in board.getPossibleMoves(self.__color):
+            newBoard = board.clone()
+            newBoard.makeMove(row, col, self.__color)
+            evaluation = self.alphabeta(newBoard, depth - 1, alpha, beta, False)
+            if evaluation > maxEval:
+                maxEval = evaluation
+                bestMove = (row, col)
+            alpha = max(alpha, evaluation)
+            if beta <= alpha:
+                break
         return bestMove

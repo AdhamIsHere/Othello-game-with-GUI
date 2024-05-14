@@ -19,7 +19,7 @@ class Board:
         return self.__board[row][col]
 
     def setColor(self, row, col, color):
-        self.__board[col][row].setColor(color)
+        self.__board[row][col].setColor(color)
 
     def countColor(self, color):
         count = 0
