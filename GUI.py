@@ -28,8 +28,8 @@ class GUI:
         self.AI = AIPlayer('white')
 
         # Variables
-        self.diff = "Easy"
-        self.depth = 1
+        self.diff = "Medium"
+        self.depth = 3
         self.START = False
         self.OPPONENT = "Human"
         self.CurrentPlayer = 'black'
