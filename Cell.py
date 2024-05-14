@@ -1,5 +1,5 @@
 class Cell:
-    def __init__(self,color):
+    def __init__(self, color):
         self.__color = color
 
     def flip(self):
@@ -8,7 +8,7 @@ class Cell:
         else:
             self.__color = 'black'
 
-    def setColor(self,color):
+    def setColor(self, color):
         self.__color = color.lower()
 
     def getColor(self):

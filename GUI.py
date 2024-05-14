@@ -63,46 +63,6 @@ class GUI:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN and self.START:
-                    # Mouse button down event
-                    if event.button == 1:  # Left mouse button
-                        print("Left mouse button clicked at", event.pos, " Cell: ",
-                              ((event.pos[1] - 25) // 50, (event.pos[0] - 25) // 50))
-                        self.Cell_x = ((event.pos[0] - 25) // 50)
-                        self.Cell_y = ((event.pos[1] - 25) // 50)
-                        if 0 <= self.Cell_x < 8 and 0 <= self.Cell_y < 8:
-                            self.cord = (self.Cell_x, self.Cell_y)
-
-                            # Human vs Human
-                        if self.OPPONENT == "Human":
-                            if self.board.isValidMove(self.Cell_y, self.Cell_x, self.CurrentPlayer):
-                                self.board.makeMove(self.Cell_y, self.Cell_x, self.CurrentPlayer)
-                                self.CurrentPlayer = self.board.playerRev(self.CurrentPlayer)
-                                if len(self.board.getPossibleMoves(self.CurrentPlayer)) == 0:
-                                    print(f"No possible moves for {self.CurrentPlayer} (Human)")
-                                    self.CurrentPlayer = self.board.playerRev(self.CurrentPlayer)
-
-                        elif self.OPPONENT == "CPU":
-                            # Human vs CPU
-                            if self.CurrentPlayer == 'black' and self.TURN == 'Human':
-                                if self.board.isValidMove(self.Cell_y, self.Cell_x, self.CurrentPlayer):
-                                    self.board.makeMove(self.Cell_y, self.Cell_x, self.CurrentPlayer)
-                                    self.CurrentPlayer = self.board.playerRev(self.CurrentPlayer)
-                                    self.TURN = 'CPU'
-                                    if len(self.board.getPossibleMoves(self.CurrentPlayer)) == 0:
-                                        self.CurrentPlayer = self.board.playerRev(self.CurrentPlayer)
-                                        print("No possible moves for white (CPU)")
-                                        self.TURN = 'Human'
-
-                    elif event.button == 3:  # Right mouse button
-                        print("Right mouse button clicked at", event.pos, " Cell: ",
-                              ((event.pos[1] - 25) // 50, (event.pos[0] - 25) // 50))
-
-                elif event.type == pygame.MOUSEMOTION:
-                    self.Cell_x = ((event.pos[0] - 25) // 50)
-                    self.Cell_y = ((event.pos[1] - 25) // 50)
-                    if 0 <= self.Cell_x < 8 and 0 <= self.Cell_y < 8:
-                        self.cord = (self.Cell_x, self.Cell_y)
 
                 # Keyboard events
                 elif event.type == pygame.KEYDOWN:
@@ -126,6 +86,47 @@ class GUI:
                         # show start screen
                         self.START = False
                         self.reset()
+
+                elif event.type == pygame.MOUSEMOTION:
+                    self.Cell_x = ((event.pos[0] - 25) // 50)
+                    self.Cell_y = ((event.pos[1] - 25) // 50)
+                    if 0 <= self.Cell_x < 8 and 0 <= self.Cell_y < 8:
+                        self.cord = (self.Cell_x, self.Cell_y)
+
+                elif event.type == pygame.MOUSEBUTTONDOWN and self.START:
+                    # Mouse button down event
+                    if event.button == 1:  # Left mouse button
+                        print("Left mouse button clicked at", event.pos, " Cell: ",
+                              ((event.pos[1] - 25) // 50, (event.pos[0] - 25) // 50))
+                        self.Cell_x = ((event.pos[0] - 25) // 50)
+                        self.Cell_y = ((event.pos[1] - 25) // 50)
+                        if 0 <= self.Cell_x < 8 and 0 <= self.Cell_y < 8:
+                            self.cord = (self.Cell_x, self.Cell_y)
+                        # player switching ---------------------------------------------------------
+                        # Human vs Human
+                        if self.OPPONENT == "Human":
+                            if self.board.isValidMove(self.Cell_y, self.Cell_x, self.CurrentPlayer):
+                                self.board.makeMove(self.Cell_y, self.Cell_x, self.CurrentPlayer)
+                                self.CurrentPlayer = self.board.playerRev(self.CurrentPlayer)
+                                if len(self.board.getPossibleMoves(self.CurrentPlayer)) == 0:
+                                    print(f"No possible moves for {self.CurrentPlayer} (Human)")
+                                    self.CurrentPlayer = self.board.playerRev(self.CurrentPlayer)
+
+                        elif self.OPPONENT == "CPU":
+                            # Human vs CPU
+                            if self.CurrentPlayer == 'black' and self.TURN == 'Human':
+                                if self.board.isValidMove(self.Cell_y, self.Cell_x, self.CurrentPlayer):
+                                    self.board.makeMove(self.Cell_y, self.Cell_x, self.CurrentPlayer)
+                                    self.CurrentPlayer = self.board.playerRev(self.CurrentPlayer)
+                                    self.TURN = 'CPU'
+                                    if len(self.board.getPossibleMoves(self.CurrentPlayer)) == 0:
+                                        self.CurrentPlayer = self.board.playerRev(self.CurrentPlayer)
+                                        print("No possible moves for white (CPU)")
+                                        self.TURN = 'Human'
+
+                    elif event.button == 3:  # Right mouse button
+                        print("Right mouse button clicked at", event.pos, " Cell: ",
+                              ((event.pos[1] - 25) // 50, (event.pos[0] - 25) // 50))
 
             # computer turn
             if self.CurrentPlayer == 'white' and self.TURN == 'CPU':
