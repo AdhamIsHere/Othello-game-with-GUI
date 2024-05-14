@@ -19,9 +19,7 @@ class AIPlayer:
         if maximizingPlayer:
             maxEval = float('-inf')
             newBoard = board.clone()
-            # for row in range(8):
-            #     for col in range(8):
-            #         if board.getCell(row, col).getColor() == '':
+
             for row, col in board.getPossibleMoves(self.__color):
                 newBoard.getCell(row, col).setColor(self.__color)
                 evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, False)
@@ -33,9 +31,7 @@ class AIPlayer:
         else:
             minEval = float('inf')
             newBoard = board.clone()
-            # for row in range(8):
-            #     for col in range(8):
-            #         if board.getCell(row, col).getColor() == '':
+
             for row, col in board.getPossibleMoves(board.playerRev(self.__color)):
                 newBoard.getCell(row, col).setColor(board.playerRev(self.__color))
                 evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, True)
@@ -56,9 +52,8 @@ class AIPlayer:
                 if board.isValidMove(row, col, self.__color):  # Check if the move is valid
                     newBoard.setColor(row, col, self.__color)
                     evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, False)
-                    if evaluation > maxEval:
+                    if evaluation >= maxEval:
                         maxEval = evaluation
                         bestMove = (row, col)
-
                     alpha = max(alpha, evaluation)
         return bestMove
