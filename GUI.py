@@ -22,7 +22,7 @@ class GUI:
         self.WHITE = (255, 255, 255)
         self.EASY = 1
         self.MEDIUM = 3
-        self.HARD = 4
+        self.HARD = 5
 
         self.PLAYER_1 = 'Human'
         self.AI = AIPlayer('white')
@@ -127,6 +127,7 @@ class GUI:
                         self.START = False
                         self.reset()
 
+            # computer turn
             if self.CurrentPlayer == 'white' and self.TURN == 'CPU':
                 if len(self.board.getPossibleMoves(self.CurrentPlayer)) > 0:
                     move = self.AI.getBestMove(self.board, self.depth)

@@ -19,29 +19,30 @@ class AIPlayer:
         if maximizingPlayer:
             maxEval = float('-inf')
             newBoard = board.clone()
-            for row in range(8):
-                for col in range(8):
-                    if board.getCell(row, col).getColor() == '':
-
-                        newBoard.getCell(row, col).setColor(self.__color)
-                        evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, False)
-                        maxEval = max(maxEval, evaluation)
-                        alpha = max(alpha, evaluation)
-                        if beta <= alpha:
-                            break  # Pruning
+            # for row in range(8):
+            #     for col in range(8):
+            #         if board.getCell(row, col).getColor() == '':
+            for row, col in board.getPossibleMoves(self.__color):
+                newBoard.getCell(row, col).setColor(self.__color)
+                evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, False)
+                maxEval = max(maxEval, evaluation)
+                alpha = max(alpha, evaluation)
+                if beta <= alpha:
+                    break  # Pruning
             return maxEval
         else:
             minEval = float('inf')
             newBoard = board.clone()
-            for row in range(8):
-                for col in range(8):
-                    if board.getCell(row, col).getColor() == '':
-                        newBoard.getCell(row, col).setColor(board.playerRev(self.__color))
-                        evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, True)
-                        minEval = min(minEval, evaluation)
-                        beta = min(beta, evaluation)
-                        if beta <= alpha:
-                            break  # Pruning
+            # for row in range(8):
+            #     for col in range(8):
+            #         if board.getCell(row, col).getColor() == '':
+            for row, col in board.getPossibleMoves(board.playerRev(self.__color)):
+                newBoard.getCell(row, col).setColor(board.playerRev(self.__color))
+                evaluation = self.alphaBetaPruning(newBoard, depth - 1, alpha, beta, True)
+                minEval = min(minEval, evaluation)
+                beta = min(beta, evaluation)
+                if beta <= alpha:
+                    break  # Pruning
             return minEval
 
     def getBestMove(self, board, depth):
