@@ -46,7 +46,7 @@ class AIPlayer:
         maxEval = float('-inf')
         alpha = float('-inf')
         beta = float('inf')
-
+        depth += 1
         for row, col in board.getPossibleMoves(self.__color):
             newBoard = board.clone()
             newBoard.makeMove(row, col, self.__color)
