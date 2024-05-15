@@ -1,8 +1,8 @@
 def utility(board, maximizingPlayer):
     if maximizingPlayer:
-        return board.countColor('black') - board.countColor('white')
-    else:
         return board.countColor('white') - board.countColor('black')
+    else:
+        return board.countColor('black') - board.countColor('white')
 
 
 class AIPlayer:
